@@ -78,8 +78,6 @@ func NewFactory(ui terminal.UI, config core_config.ReadWriter, manifestRepo mani
 		serviceBuilder,
 	)
 
-	// factory.cmdsByName["api"] = commands.NewApi(ui, config, repoLocator.GetEndpointRepository())
-	factory.cmdsByName["apps"] = application.NewListApps(ui, config, repoLocator.GetAppSummaryRepository())
 	factory.cmdsByName["auth"] = commands.NewAuthenticate(ui, config, repoLocator.GetAuthenticationRepository())
 	factory.cmdsByName["buildpacks"] = buildpack.NewListBuildpacks(ui, repoLocator.GetBuildpackRepository())
 	factory.cmdsByName["config"] = commands.NewConfig(ui, config)
@@ -129,7 +127,6 @@ func NewFactory(ui terminal.UI, config core_config.ReadWriter, manifestRepo mani
 	factory.cmdsByName["oauth-token"] = commands.NewOAuthToken(ui, config, repoLocator.GetAuthenticationRepository())
 	factory.cmdsByName["org"] = organization.NewShowOrg(ui, config)
 	factory.cmdsByName["org-users"] = user.NewOrgUsers(ui, config, repoLocator.GetUserRepository())
-	factory.cmdsByName["orgs"] = organization.NewListOrgs(ui, config, repoLocator.GetOrganizationRepository())
 	factory.cmdsByName["passwd"] = commands.NewPassword(ui, repoLocator.GetPasswordRepository(), config)
 	factory.cmdsByName["purge-service-offering"] = service.NewPurgeServiceOffering(ui, config, repoLocator.GetServiceRepository())
 	factory.cmdsByName["quotas"] = quota.NewListQuotas(ui, config, repoLocator.GetQuotaRepository())
@@ -158,7 +155,6 @@ func NewFactory(ui terminal.UI, config core_config.ReadWriter, manifestRepo mani
 	factory.cmdsByName["create-shared-domain"] = domain.NewCreateSharedDomain(ui, config, repoLocator.GetDomainRepository())
 	factory.cmdsByName["space"] = space.NewShowSpace(ui, config, repoLocator.GetSpaceQuotaRepository())
 	factory.cmdsByName["space-users"] = user.NewSpaceUsers(ui, config, repoLocator.GetSpaceRepository(), repoLocator.GetUserRepository())
-	factory.cmdsByName["spaces"] = space.NewListSpaces(ui, config, repoLocator.GetSpaceRepository())
 	factory.cmdsByName["stacks"] = commands.NewListStacks(ui, config, repoLocator.GetStackRepository())
 	factory.cmdsByName["stack"] = commands.NewListStack(ui, config, repoLocator.GetStackRepository())
 	factory.cmdsByName["target"] = commands.NewTarget(ui, config, repoLocator.GetOrganizationRepository(), repoLocator.GetSpaceRepository())

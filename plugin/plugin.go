@@ -32,6 +32,9 @@ type CliConnection interface {
 	DopplerEndpoint() (string, error)
 	AccessToken() (string, error)
 	GetApp(string) (plugin_models.Application, error)
+	GetApps() ([]plugin_models.ApplicationSummary, error)
+	GetOrgs() ([]plugin_models.Organization, error)
+	GetSpaces() ([]plugin_models.Space, error)
 }
 
 type VersionType struct {

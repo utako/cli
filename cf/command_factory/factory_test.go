@@ -43,11 +43,11 @@ var _ = Describe("factory", func() {
 		commands := factory.CommandMetadatas()
 
 		suffixesToIgnore := []string{
-			"i18n_init.go", // ignore all i18n initializers
-			"_test.go",     // ignore test files
-			".test",        // ignore generated .test (temporary files)
-			".test.exe",    // ignore generated .test.exe (temporary files)
-			"#",            // emacs autosave files
+			"i18n_init.go",  // ignore all i18n initializers
+			"_test.go",      // ignore test files
+			".test",         // ignore generated .test (temporary files)
+			".coverprofile", // ignore generated .coverprofile (ginkgo files to test code coverage)
+			"#",             // emacs autosave files
 		}
 
 		err := filepath.Walk("../commands", func(path string, info os.FileInfo, err error) error {
@@ -55,7 +55,7 @@ var _ = Describe("factory", func() {
 				return nil
 			}
 
-			if info.Name() == "api.go" || info.Name() == "app.go" {
+			if info.Name() == "api.go" || info.Name() == "app.go" || info.Name() == "apps.go" || info.Name() == "orgs.go" || info.Name() == "spaces.go" {
 				return nil
 			}
 

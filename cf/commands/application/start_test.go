@@ -128,6 +128,20 @@ var _ = Describe("start command", func() {
 		return
 	}
 
+	callStartWithTimeout := func(args []string, config core_config.Reader, requirementsFactory *testreq.FakeReqFactory, displayApp ApplicationDisplayer, appRepo applications.ApplicationRepository, appInstancesRepo app_instances.AppInstancesRepository, logRepo api.LogsNoaaRepository, oldLogsRepo api.OldLogsRepository) (ui *testterm.FakeUI) {
+		oldLogsRepoWithTimeout := &testapi.FakeOldLogsRepositoryWithTimeout{}
+		ui = new(testterm.FakeUI)
+
+		cmd := NewStart(ui, config, displayApp, appRepo, appInstancesRepo, logRepo, oldLogsRepoWithTimeout)
+		cmd.LogServerConnectionTimeout = 100 * time.Millisecond
+		cmd.StagingTimeout = 100 * time.Millisecond
+		cmd.StartupTimeout = 200 * time.Millisecond
+		cmd.PingerThrottle = 50 * time.Millisecond
+
+		testcmd.RunCommand(cmd, args, requirementsFactory)
+		return
+	}
+
 	startAppWithInstancesAndErrors := func(displayApp ApplicationDisplayer, app models.Application, requirementsFactory *testreq.FakeReqFactory) (ui *testterm.FakeUI, appRepo *testApplication.FakeApplicationRepository, appInstancesRepo *testAppInstanaces.FakeAppInstancesRepository) {
 		configRepo := testconfig.NewRepositoryWithDefaults()
 		appRepo = &testApplication.FakeApplicationRepository{
@@ -307,6 +321,23 @@ var _ = Describe("start command", func() {
 			Expect(ui.Outputs).To(ContainSubstrings(
 				[]string{"App my-app was started using this command `detected start command`"},
 			))
+		})
+
+		It("handles timeouts gracefully", func() {
+			displayApp := &testcmd.FakeAppDisplayer{}
+			requirementsFactory.Application = defaultAppForStart
+			appRepo := &testApplication.FakeApplicationRepository{
+				UpdateAppResult: defaultAppForStart,
+			}
+			appRepo.ReadReturns.App = defaultAppForStart
+
+			appInstancesRepo := &testAppInstanaces.FakeAppInstancesRepository{}
+
+			ui := callStartWithTimeout([]string{"my-app"}, testconfig.NewRepository(), requirementsFactory, displayApp, appRepo, appInstancesRepo, logRepo, oldLogsRepo)
+			Expect(ui.Outputs).To(ContainSubstrings(
+				[]string{"timeout connecting to log server"},
+			))
+
 		})
 
 		It("only displays staging logs when an app is starting", func() {

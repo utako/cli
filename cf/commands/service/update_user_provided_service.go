@@ -101,11 +101,9 @@ func (cmd *UpdateUserProvidedService) Run(c *cli.Context) {
 	}
 
 	cmd.ui.Ok()
-	cmd.ui.Say(T("TIP: To make these changes take effect, use '{{.CFUnbindCommand}}' to unbind the service, '{{.CFBindComand}}' to rebind, and then '{{.CFRestageCommand}}' to update the app with the new env variables",
+	cmd.ui.Say(T("TIP: Use '{{.CFRestageCommand}}' for any bound apps to ensure your env variable changes take effect",
 		map[string]interface{}{
-			"CFUnbindCommand":  cf.Name() + " unbind-service",
-			"CFBindComand":     cf.Name() + " bind-service",
-			"CFRestageCommand": cf.Name() + " restage",
+			"CFRestageCommand": terminal.CommandColor(cf.Name() + " restage"),
 		}))
 
 	if params == "" && drainUrl == "" {

@@ -1,47 +1,74 @@
 package command_registry
 
 import (
+	"fmt"
+	"os"
 	"strings"
 
 	"github.com/cloudfoundry/cli/cf/configuration/config_helpers"
 	"github.com/cloudfoundry/cli/cf/configuration/core_config"
 	. "github.com/cloudfoundry/cli/cf/i18n"
 	"github.com/cloudfoundry/cli/cf/i18n/detection"
+	. "github.com/cloudfoundry/cli/cf/terminal"
 )
 
 var _ = initI18nFunc()
 var Commands = NewRegistry()
 
 func initI18nFunc() bool {
-	T = Init(core_config.NewRepositoryFromFilepath(config_helpers.DefaultFilePath(), nil), &detection.JibberJabberDetector{})
+	errorHandler := func(err error) {
+		if err != nil {
+			fmt.Println(FailureColor("FAILED"))
+			fmt.Println("Error read/writing config: ", err.Error())
+			os.Exit(1)
+		}
+	}
+	T = Init(core_config.NewRepositoryFromFilepath(config_helpers.DefaultFilePath(), errorHandler), &detection.JibberJabberDetector{})
 	return true
 }
 
 type registry struct {
-	cmd map[string]Command
+	cmd   map[string]Command
+	alias map[string]string
 }
 
 func NewRegistry() *registry {
 	return &registry{
-		cmd: make(map[string]Command),
+		cmd:   make(map[string]Command),
+		alias: make(map[string]string),
 	}
 }
 
 func Register(cmd Command) {
 	m := cmd.MetaData()
-	name := m.Name
-	Commands.cmd[name] = cmd
+	Commands.cmd[m.Name] = cmd
+
+	Commands.alias[m.ShortName] = m.Name
 }
 
 func (r *registry) FindCommand(name string) Command {
 	if _, ok := r.cmd[name]; ok {
 		return r.cmd[name]
 	}
+
+	if alias, exists := r.alias[name]; exists {
+		return r.cmd[alias]
+	}
+
 	return nil
 }
 
 func (r *registry) CommandExists(name string) bool {
-	_, ok := r.cmd[name]
+	var ok bool
+
+	if _, ok = r.cmd[name]; !ok {
+		alias, exists := r.alias[name]
+
+		if exists {
+			_, ok = r.cmd[alias]
+		}
+	}
+
 	return ok
 }
 
@@ -57,15 +84,15 @@ func (r *registry) CommandUsage(cmdName string) string {
 	output += "   " + cmd.MetaData().Name + " - " + cmd.MetaData().Description + "\n\n"
 
 	output += T("USAGE") + ":" + "\n"
-	output += "   " + cmd.MetaData().Usage + "\n\n"
+	output += "   " + cmd.MetaData().Usage + "\n"
 
 	if cmd.MetaData().ShortName != "" {
-		output += T("ALIAS") + ":" + "\n"
-		output += "   " + cmd.MetaData().ShortName + "\n\n"
+		output += "\n" + T("ALIAS") + ":" + "\n"
+		output += "   " + cmd.MetaData().ShortName + "\n"
 	}
 
 	if cmd.MetaData().Flags != nil {
-		output += T("OPTIONS") + ":" + "\n"
+		output += "\n" + T("OPTIONS") + ":" + "\n"
 
 		//find longest name length
 		l := 0
