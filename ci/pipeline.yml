@@ -24,7 +24,7 @@ resources:
   type: git
   source:
     uri: https://github.com/cloudfoundry/cli
-    branch: concourse
+    branch: concourse2
 
 - name: cli-ci
   type: git
