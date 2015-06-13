@@ -15,7 +15,7 @@ powershell .\bin\replace-sha.ps1 < NUL || exit /b 1
 go build -v -o %CF_EXE_NAME% ./main || exit /b 1
 
 go install github.com/onsi/ginkgo/ginkgo || exit /b 1
-echo $GOPATH
+echo %GOPATH%
 go test -i ./cf/... ./generic/... ./testhelpers/...
 go test -cover -v ./cf/... ./generic/... ./testhelpers/... ./main/..
 rem ginkgo -cover -r ./cf ./generic ./testhelpers ./main
