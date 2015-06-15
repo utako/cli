@@ -2620,11 +2620,6 @@
       "modified": false
    },
    {
-      "id": "Incorrect usage",
-      "translation": "Incorrect usage",
-      "modified": false
-   },
-   {
       "id": "Install the plugin defined in command argument",
       "translation": "Install the plugin defined in command argument",
       "modified": false
