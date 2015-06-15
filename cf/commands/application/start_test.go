@@ -134,8 +134,8 @@ var _ = Describe("start command", func() {
 
 		cmd := NewStart(ui, config, displayApp, appRepo, appInstancesRepo, logRepo, oldLogsRepoWithTimeout)
 		cmd.LogServerConnectionTimeout = 100 * time.Millisecond
-		cmd.StagingTimeout = 100 * time.Millisecond
-		cmd.StartupTimeout = 200 * time.Millisecond
+		cmd.StagingTimeout = 300 * time.Millisecond
+		cmd.StartupTimeout = 500 * time.Millisecond
 		cmd.PingerThrottle = 50 * time.Millisecond
 
 		testcmd.RunCommand(cmd, args, requirementsFactory)
@@ -271,8 +271,8 @@ var _ = Describe("start command", func() {
 			appInstancesRepo.GetInstancesStub = getInstance
 
 			cmd := NewStart(ui, config, displayApp, appRepo, appInstancesRepo, logRepo, oldLogsRepo)
-			cmd.StagingTimeout = 100 * time.Millisecond
-			cmd.StartupTimeout = 200 * time.Millisecond
+			cmd.StagingTimeout = 300 * time.Millisecond
+			cmd.StartupTimeout = 500 * time.Millisecond
 			cmd.PingerThrottle = 50 * time.Millisecond
 			cmd.ApplicationStart(defaultAppForStart, "some-org", "some-space")
 
