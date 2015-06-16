@@ -27,7 +27,7 @@ import (
 	. "github.com/cloudfoundry/cli/testhelpers/matchers"
 )
 
-var _ = Describe("start command", func() {
+var _ = FDescribe("start command", func() {
 	var (
 		ui                        *testterm.FakeUI
 		defaultAppForStart        = models.Application{}
@@ -303,7 +303,6 @@ var _ = Describe("start command", func() {
 			defaultAppForStart.DetectedStartCommand = "detected start command"
 			displayApp := &testcmd.FakeAppDisplayer{}
 			ui, appRepo, _ := startAppWithInstancesAndErrors(displayApp, defaultAppForStart, requirementsFactory)
-			appRepo.GetAppReturns(defaultAppForStart, nil)
 
 			Expect(appRepo.ReadCalls).To(Equal(1))
 			Expect(ui.Outputs).To(ContainSubstrings(
@@ -514,7 +513,7 @@ var _ = Describe("start command", func() {
 		})
 
 		Context("when an app instance is starting", func() {
-			It("reports any additional details", func() {
+			FIt("reports any additional details", func() {
 				displayApp := &testcmd.FakeAppDisplayer{}
 				appInstance := models.AppInstanceFields{
 					State: models.InstanceStarting,
