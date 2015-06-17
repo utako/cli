@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 SCRIPTNAME=$1
 INNO_BIN="Inno Setup 5/ISCC.exe"
 
@@ -26,3 +24,5 @@ SCRIPTNAME=$(winepath -w "$SCRIPTNAME" 2> /dev/null)
 
 # Compile!
 wine "$INNO_PATH" "$SCRIPTNAME"
+
+echo $?
