@@ -34,7 +34,7 @@ mkdir -p ${CATSPATH}
 git clone https://github.com/cloudfoundry/cf-release ${RELEASEPATH}
 pushd $RELEASEPATH
   export CATS_SHA=$(git submodule | grep acceptance-tests | awk '{print $1;}' | cut -d "-" -f 2)
-popd $RELEASEPATH
+popd  
 rm -rf $RELEASEPATH
 
 git clone https://github.com/cloudfoundry/cf-acceptance-tests ${CATSPATH}
