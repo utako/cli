@@ -37,9 +37,18 @@ echo }>> %CONFIG%
 
 mkdir %GOPATH%\src\github.com\cloudfoundry
 set CATSPATH=%GOPATH%\src\github.com\cloudfoundry\cf-acceptance-tests
+set RELEASEPATH=%GOPATH%\src\github.com\cloudfoundry\cf-release
 ::move .\cf-release\src\acceptance-tests %CATSPATH%
-git clone https://github.com/cloudfoundry/cf-acceptance-tests %CATSPATH%
 
+git clone https://github.com/cloudfoundry/cf-release %RELEASEPATH%
+cd %RELEASEPATH%
+git submodule > shas.txt
+find "acceptance-tests" shas.txt > cats_sha.txt
+for /f "tokens=*" %F in ('more +2 cats_sha.txt') do set _CATS_SHA=%F
+echo.CATS_SHA=%_CATS_SHA:~1,40%
+cd %CONFIG_DIR% 
+
+git clone https://github.com/cloudfoundry/cf-acceptance-tests %CATSPATH%
 mkdir %CATSPATH%\bin
 
 move .\windows64-binary\cf* %CATSPATH%\bin\cf.exe || exit /b 1
@@ -50,6 +59,7 @@ set GOPATH=%CATS_DEPS_GOPATH%;%GOPATH%
 set PATH=%CATS_DEPS_GOPATH%\bin;%CATSPATH%\bin;%PATH%
 
 cd %CATSPATH%
+git checkout %CATS_SHA%
 
 go install github.com/onsi/ginkgo/ginkgo || exit /b 1
 
