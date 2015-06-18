@@ -43,8 +43,7 @@ set RELEASEPATH=%GOPATH%\src\github.com\cloudfoundry\cf-release
 git clone https://github.com/cloudfoundry/cf-release %RELEASEPATH%
 cd %RELEASEPATH%
 git submodule>>shas.txt
-findstr "acceptance-tests" shas.txt>>cats_sha.txt
-for /f "tokens=*" %%F in ('more +2 cats_sha.txt') do set _CATS_SHA=%%F
+for /f "tokens=*" %%F in ('findstr "acceptance-tests" shas.txt') do set _CATS_SHA=%%F
 echo.CATS_SHA=%_CATS_SHA:~1,40%
 cd %CONFIG_DIR% 
 
