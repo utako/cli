@@ -44,7 +44,8 @@ git clone https://github.com/cloudfoundry/cf-release %RELEASEPATH%
 cd %RELEASEPATH%
 git submodule>>shas.txt
 for /f "tokens=*" %%F in ('findstr "acceptance-tests" shas.txt') do set _CATS_SHA=%%F
-echo.CATS_SHA=%_CATS_SHA:~1,40%
+set CATS_SHA=%_CATS_SHA:~1,40%
+echo CATS_SHA is %CATS_SHA%
 cd %CONFIG_DIR% 
 
 git clone https://github.com/cloudfoundry/cf-acceptance-tests %CATSPATH%
