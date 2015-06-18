@@ -24,11 +24,19 @@ ADMIN_USER="admin" ADMIN_PASSWORD="admin" \
   ${CLI_DIR}/ci/scripts/create-cats-config
 
 export CATSPATH=${GOPATH}/src/github.com/cloudfoundry/cf-acceptance-tests
+export RELEASEPATH=${GOPATH}/src/github.com/cloudfoundry/cf-release
 export CATS_GOPATH=${CATSPATH}/Godeps/_workspace
 
 # move cats into gopath
 mkdir -p ${CATSPATH}
 #cp -r ${CF_RELEASE_DIR}/src/acceptance-tests/* ${CATSPATH}
+
+git clone https://github.com/cloudfoundry/cf-release ${RELEASEPATH}
+pushd $RELEASEPATH
+  export CATS_SHA=$(git submodule | grep acceptance-tests | awk '{print $1;}' | cut -d "-" -f 2)
+popd $RELEASEPATH
+rm -rf $RELEASEPATH
+
 git clone https://github.com/cloudfoundry/cf-acceptance-tests ${CATSPATH}
 export GOPATH=${CATS_GOPATH}:${GOPATH}
 export PATH=${CATS_GOPATH}/bin:${PATH}
@@ -39,6 +47,8 @@ install linux64-binary/cf-* ${CATS_GOPATH}/bin/cf
 
 # run cats
 pushd ${CATSPATH}
+  git checkout $CATS_SHA
+  echo CATs is now at $CATS_SHA
   go install github.com/onsi/ginkgo/ginkgo
 
   CONFIG=${CONFIG_DIR}/config.json \
