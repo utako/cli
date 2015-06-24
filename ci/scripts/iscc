@@ -17,7 +17,8 @@ INNO_PATH="/tmp/.wine/${INNO_BIN}"
 echo $INNO_PATH
 
 # Translate unix script path to windows path
-SCRIPTNAME=$(winepath -w "$SCRIPTNAME" 2> /dev/null)
+# SCRIPTNAME=$(winepath -w "$SCRIPTNAME" 2> /dev/null)
+SCRIPTNAME=$(winepath -w "$SCRIPTNAME")
 echo SCRIPTNAME: $SCRIPTNAME
 
 # Check if Inno Setup is installed into wine
