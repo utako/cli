@@ -126,6 +126,46 @@ resources:
     access_key_id: {{pipeline-bucket-access-key-id}}
     secret_access_key: {{pipeline-bucket-secret-access-key}}
 
+- name: windows32-installer
+  type: s3
+  source:
+    bucket: cf-cli-pipeline-artifacts
+    regexp: installer-windows-386.zip
+    access_key_id: {{pipeline-bucket-access-key-id}}
+    secret_access_key: {{pipeline-bucket-secret-access-key}}
+
+- name: windows64-installer
+  type: s3
+  source:
+    bucket: cf-cli-pipeline-artifacts
+    regexp: installer-windows-amd64.zip
+    access_key_id: {{pipeline-bucket-access-key-id}}
+    secret_access_key: {{pipeline-bucket-secret-access-key}}
+
+- name: osx-installer
+  type: s3
+  source:
+    bucket: cf-cli-pipeline-artifacts
+    regexp: installer-osx-amd64.pkg
+    access_key_id: {{pipeline-bucket-access-key-id}}
+    secret_access_key: {{pipeline-bucket-secret-access-key}}
+
+- name: linux32-installer
+  type: s3
+  source:
+    bucket: cf-cli-pipeline-artifacts
+    regexp: cf-cli_i386.deb
+    access_key_id: {{pipeline-bucket-access-key-id}}
+    secret_access_key: {{pipeline-bucket-secret-access-key}}
+
+- name: linux64-installer
+  type: s3
+  source:
+    bucket: cf-cli-pipeline-artifacts
+    regexp: cf-cli_amd64.deb
+    access_key_id: {{pipeline-bucket-access-key-id}}
+    secret_access_key: {{pipeline-bucket-secret-access-key}}
+
 jobs:
 - name: rc
   serial: true
@@ -326,6 +366,21 @@ jobs:
       params:
         AWS_ACCESS_KEY_ID: {{publish-access-key-id}}
         AWS_SECRET_ACCESS_KEY: {{publish-secret-access-key}}
+  - put: windows32-installer
+    params:
+      from: release/*
+  - put: windows64-installer
+    params:
+      from: release/*
+  - put: linux64-installer
+    params:
+      from: release/*
+  - put: linux32-installer
+    params:
+      from: release/*
+  - put: osx-installer
+    params:
+      from: release/*
 
 - name: provision-linux
   serial: true
