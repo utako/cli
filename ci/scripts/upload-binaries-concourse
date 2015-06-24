@@ -17,8 +17,8 @@ function upload_artifacts {
 
   for file in $(ls release)
   do
-    echo s3cmd --config=$S3_CONFIG_FILE put release/$file s3://go-cli/$s3_path_prefix/$file
-    s3cmd --config=$S3_CONFIG_FILE put release/$file s3://go-cli/$s3_path_prefix/$file
+    echo s3cmd --config=$S3_CONFIG_FILE put release/$file s3://cf-cli-pipeline-artifacts/$s3_path_prefix/$file
+    s3cmd --config=$S3_CONFIG_FILE put release/$file s3://cf-cli-pipeline-artifacts/$s3_path_prefix/$file
   done
 }
 
