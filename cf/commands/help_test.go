@@ -4,7 +4,6 @@ import (
 	"github.com/cloudfoundry/cli/cf/command_registry"
 	"github.com/cloudfoundry/cli/cf/configuration/plugin_config"
 	testconfig "github.com/cloudfoundry/cli/cf/configuration/plugin_config/fakes"
-	"github.com/cloudfoundry/cli/commands_loader"
 	"github.com/cloudfoundry/cli/plugin"
 	testcmd "github.com/cloudfoundry/cli/testhelpers/commands"
 	io_helpers "github.com/cloudfoundry/cli/testhelpers/io"
@@ -17,8 +16,6 @@ import (
 )
 
 var _ = Describe("Help", func() {
-
-	commands_loader.Load()
 
 	var (
 		ui                  *testterm.FakeUI

@@ -14,6 +14,7 @@ import (
 	"github.com/cloudfoundry/cli/cf/command_metadata"
 	"github.com/cloudfoundry/cli/cf/command_registry"
 	"github.com/cloudfoundry/cli/cf/command_runner"
+	"github.com/cloudfoundry/cli/cf/commands"
 	"github.com/cloudfoundry/cli/cf/configuration/core_config"
 	"github.com/cloudfoundry/cli/cf/configuration/plugin_config"
 	"github.com/cloudfoundry/cli/cf/help"
@@ -24,7 +25,6 @@ import (
 	"github.com/cloudfoundry/cli/cf/panic_printer"
 	"github.com/cloudfoundry/cli/cf/requirements"
 	"github.com/cloudfoundry/cli/cf/terminal"
-	"github.com/cloudfoundry/cli/commands_loader"
 	"github.com/cloudfoundry/cli/flags"
 	"github.com/cloudfoundry/cli/plugin/rpc"
 	"github.com/codegangsta/cli"
@@ -46,7 +46,7 @@ type cliDependencies struct {
 }
 
 func main() {
-	commands_loader.Load()
+	commands.Load()
 
 	defer handlePanics(deps.TeePrinter)
 	defer deps.Config.Close()

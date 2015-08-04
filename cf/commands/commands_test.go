@@ -1,4 +1,4 @@
-package commands_loader_test
+package commands_test
 
 import (
 	"fmt"
@@ -7,24 +7,22 @@ import (
 	"strings"
 
 	"github.com/cloudfoundry/cli/cf/command_registry"
-	"github.com/cloudfoundry/cli/commands_loader"
+	"github.com/cloudfoundry/cli/cf/commands"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
-var _ = XDescribe("CommandsLoader", func() {
+var _ = Describe("Command Lint", func() {
 	It("references all command packages so all commands can be registered in command_registry", func() {
+		commands.Load()
 
-		commands_loader.Load()
-
-		count := walkDirAndCountCommand("../cf/commands")
-		count = count
+		count := walkDirAndCountCommand(".")
 		Ω(command_registry.Commands.TotalCommands()).To(Equal(count))
 	})
 })
 
 func walkDirAndCountCommand(path string) int {
-	cmdCount := 0
+	cmdCount := -1 // ignore this test.
 
 	filepath.Walk(path, func(p string, info os.FileInfo, err error) error {
 		if err != nil {

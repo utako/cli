@@ -1,7 +1,6 @@
-package commands_loader
+package commands
 
 import (
-	"github.com/cloudfoundry/cli/cf/commands"
 	"github.com/cloudfoundry/cli/cf/commands/application"
 	"github.com/cloudfoundry/cli/cf/commands/buildpack"
 	"github.com/cloudfoundry/cli/cf/commands/domain"
@@ -32,7 +31,7 @@ get initialized
 ********************/
 
 func Load() {
-	_ = commands.Api{}
+	_ = Api{}
 	_ = application.ListApps{}
 	_ = buildpack.ListBuildpacks{}
 	_ = domain.CreateDomain{}
